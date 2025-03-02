@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="fr" class="h-full bg-gray-50">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contrôle Qualité Statistique - ENSEM</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+  <style>
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-in { animation: fadeIn 0.3s ease-in; }
+    .drag-active { @apply border-blue-500 bg-blue-50 ring-2 ring-blue-200; }
+    .card-hover { @apply transition-transform duration-200 hover:scale-[1.01] hover:shadow-xl; }
+  </style>
+</head>
+<body class="h-full font-['Inter']">
+  <main class="min-h-[calc(100vh-10rem)] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-4xl w-full space-y-10 animate-fade-in">
+      <!-- En-tête -->
+      <header class="text-center space-y-3">
+        <h1 class="text-4xl font-bold text-gray-900">
+          <span class="bg-gradient-to-r from-blue-700 to-blue-500 bg-clip-text text-transparent">
+            Analyse Statistique de Processus
+          </span>
+        </h1>
+        <!-- Bouton pour revenir à /charts, positionné sous le titre -->
+        <a href="/charts" class="inline-block bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition-colors">
+          <i class="fas fa-arrow-left mr-2"></i>Retour à l'accueil
+        </a>
+        <p class="text-lg text-gray-600 mt-2 max-w-2xl mx-auto">
+          Outil d'analyse avancée pour le contrôle qualité industriel via les cartes de contrôle X̄ et R
+        </p>
+      </header>
+
+      <section class="card-hover bg-white rounded-2xl shadow-lg p-10 border border-gray-100">
+        <form action="/control-charts" method="POST" enctype="multipart/form-data" class="space-y-8">
+          <div class="space-y-6">
+            <!-- Zone d'importation -->
+            <div class="group relative">
+              <div id="drop-zone" class="border-2 border-dashed border-gray-200 rounded-xl p-10 text-center cursor-pointer bg-gray-50 hover:border-blue-400 transition-colors duration-200 flex flex-col items-center justify-center">
+                <!-- Instructions visibles uniquement si aucun fichier n'est importé -->
+                <div id="upload-content" class="space-y-5">
+                  <div class="text-blue-500 transform transition-all duration-300 group-hover:scale-110">
+                    <i class="fas fa-file-import text-5xl"></i>
+                  </div>
+                  <div class="space-y-2 relative">
+                    <p class="text-gray-600 font-medium">
+                      <span class="text-blue-600">Glisser-déposer le fichier</span> ou 
+                      <span class="text-blue-600">parcourir</span>
+                    </p>
+                    <p class="text-xs text-gray-400">Fichiers de données de production uniquement</p>
+                    <!-- Message d'erreur affiché au survol si aucun fichier n'est importé -->
+                    <span id="no-file-message" class="hidden absolute top-full left-0 right-0 text-red-500 text-sm mt-2">Aucun fichier choisi</span>
+                  </div>
+                </div>
+                
+                <!-- Zone d'affichage du fichier sélectionné -->
+                <div id="file-info" class="hidden w-full items-center justify-between p-4 mt-4 bg-white rounded-lg shadow-sm border border-gray-200 transition-all duration-200 hover:shadow-md" style="position: relative; z-index: 10;">
+                  <div class="flex items-center space-x-4 flex-1 min-w-0">
+                    <i class="fas fa-file-excel text-green-500 text-2xl"></i>
+                    <div class="text-left truncate">
+                      <p id="file-name" class="text-sm font-medium text-gray-800 truncate"></p>
+                      <p class="text-xs text-gray-400 mt-1">Prêt pour l'analyse</p>
+                    </div>
+                  </div>
+                  <button 
+                    type="button" 
+                    onclick="removeFile(event)" 
+                    class="flex items-center space-x-2 bg-red-50 hover:bg-red-100 text-red-600 px-3 py-2 rounded-lg transition-colors duration-200"
+                  >
+                    <i class="fas fa-trash text-sm"></i>
+                    <span class="text-sm">Supprimer</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Input file -->
+              <input 
+                id="datafile"
+                name="datafile"
+                type="file"
+                class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                required
+                accept=".csv,.xlsx"
+                title=""
+                onmouseover="this.title=''"
+                onfocus="this.blur()"
+                onchange="handleFileSelect(event)"
+              >
+            </div>
+          </div>
+
+          <!-- Type d'analyse -->
+          <div class="space-y-6">
+            <div class="space-y-2">
+              <label class="text-base font-medium text-gray-900 flex items-center space-x-2">
+                <i class="fas fa-chart-simple text-blue-600"></i>
+                <span>Type d'analyse</span>
+              </label>
+              <p class="text-sm text-gray-500">Sélectionnez le type de carte de contrôle à générer</p>
+            </div>
+
+            <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
+              <label class="flex items-center p-5 bg-white border-2 rounded-xl cursor-pointer transition-all hover:border-blue-300 border-gray-200">
+                <input type="radio" name="chartType" value="x" checked class="h-5 w-5 text-blue-600 border-2 border-gray-300 focus:ring-blue-500">
+                <div class="ml-4">
+                  <span class="block text-base font-medium text-gray-900">Carte des Moyennes</span>
+                  <span class="block text-sm text-gray-500 mt-1">Diagramme X̄ (Moyennes)</span>
+                </div>
+              </label>
+
+              <label class="flex items-center p-5 bg-white border-2 rounded-xl cursor-pointer transition-all hover:border-blue-300 border-gray-200">
+                <input type="radio" name="chartType" value="r" class="h-5 w-5 text-blue-600 border-2 border-gray-300 focus:ring-blue-500">
+                <div class="ml-4">
+                  <span class="block text-base font-medium text-gray-900">Carte des Étendues</span>
+                  <span class="block text-sm text-gray-500 mt-1">Diagramme R (Étendues)</span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <button id="submit-button" type="submit" disabled class="w-full py-4 px-6 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl font-semibold shadow-md hover:from-blue-700 hover:to-blue-800 transition-all duration-200 hover:shadow-lg flex items-center justify-center space-x-3 opacity-50 cursor-not-allowed">
+            <i class="fas fa-chart-line text-lg"></i>
+            <span>Lancer l'analyse</span>
+          </button>
+        </form>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    // Gestion du hover sur la zone de dépôt
+    const dropZone = document.getElementById('drop-zone');
+    const noFileMessage = document.getElementById('no-file-message');
+    const datafileInput = document.getElementById('datafile');
+    const uploadContent = document.getElementById('upload-content');
+
+    dropZone.addEventListener('mouseenter', () => {
+      if (!datafileInput.files.length && !uploadContent.classList.contains('hidden')) {
+        noFileMessage.classList.remove('hidden');
+      }
+    });
+
+    dropZone.addEventListener('mouseleave', () => {
+      noFileMessage.classList.add('hidden');
+    });
+
+    // Gestion des fichiers
+    const handleFileSelect = (event) => {
+      const file = event.target.files?.[0];
+      if (!file) return;
+
+      const allowedExtensions = ['csv', 'xlsx'];
+      const fileExtension = file.name.split('.').pop().toLowerCase();
+      if (!allowedExtensions.includes(fileExtension)) {
+        alert("Format de fichier invalide. Seuls les formats .csv et .xlsx sont acceptés.");
+        removeFile(event);
+        return;
+      }
+
+      const fileInfo = document.getElementById('file-info');
+      document.getElementById("file-name").textContent = file.name;
+      fileInfo.classList.remove('hidden');
+      uploadContent.classList.add('hidden');
+      noFileMessage.classList.add('hidden');
+
+      const submitButton = document.getElementById('submit-button');
+      submitButton.disabled = false;
+      submitButton.classList.remove('opacity-50', 'cursor-not-allowed');
+
+      datafileInput.style.pointerEvents = 'none';
+    };
+
+    const removeFile = (event) => {
+      if (event) event.stopPropagation();
+      const fileInfo = document.getElementById('file-info');
+      datafileInput.style.pointerEvents = 'auto';
+      datafileInput.value = '';
+      if (datafileInput.value) {
+        datafileInput.type = 'text';
+        datafileInput.type = 'file';
+      }
+      fileInfo.classList.add('hidden');
+      uploadContent.classList.remove('hidden');
+
+      const submitButton = document.getElementById('submit-button');
+      submitButton.disabled = true;
+      submitButton.classList.add('opacity-50', 'cursor-not-allowed');
+    };
+
+    // Gestion du drag & drop
+    const initDragDrop = () => {
+      const handleDrag = (e) => {
+        e.preventDefault();
+        dropZone.classList.toggle('drag-active', ['dragenter', 'dragover'].includes(e.type));
+      };
+
+      ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        dropZone.addEventListener(eventName, handleDrag);
+      });
+
+      dropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        const files = e.dataTransfer.files;
+        if (files.length) {
+          datafileInput.files = files;
+          datafileInput.dispatchEvent(new Event('change'));
+        }
+      });
+    };
+
+    document.addEventListener('DOMContentLoaded', initDragDrop);
+  </script>
+</body>
+</html>

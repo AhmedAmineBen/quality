@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Analyse Qualité - Carte de Contrôle</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Chart.js et plugin Zoom -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom"></script>
+  <!-- Google Font: Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* Global Styles */
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f4f7fa;
+      color: #333;
+    }
+    /* Styles des cartes, tableaux et autres éléments */
+    .card {
+      border: none;
+      border-radius: 0.75rem;
+      box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+      background-color: #fff;
+    }
+    .card-header {
+      background-color: #ffffff;
+      border-bottom: 1px solid #e0e0e0;
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 0.75rem 1.25rem;
+    }
+    .card-header.bg-gradient {
+      background: linear-gradient(45deg, #28a745, #218838);
+      color: #fff;
+    }
+    .chart-container {
+      position: relative;
+      height: 60vh;
+      border: 1px solid #e9ecef;
+      border-radius: 0.75rem;
+      background-color: #ffffff;
+      padding: 1rem;
+      box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.1);
+      margin-bottom: 1rem;
+    }
+    .btn-outline-success {
+      border-color: #28a745;
+      color: #28a745;
+    }
+    .btn-outline-success:hover {
+      background-color: #28a745;
+      color: #fff;
+    }
+    .btn-outline-secondary {
+      border-color: #6c757d;
+      color: #6c757d;
+    }
+    .btn-outline-secondary:hover {
+      background-color: #6c757d;
+      color: #fff;
+    }
+    .stat-card {
+      border-left: 4px solid #28a745;
+      background-color: #f9f9f9;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    .table-custom {
+      border: 1px solid #e0e0e0;
+      border-radius: 0.5rem;
+      overflow: hidden;
+      box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    }
+    .table-custom th, .table-custom td {
+      border: none;
+      padding: 0.75rem;
+    }
+    .table-custom thead th {
+      background-color: #f1f3f5;
+      font-weight: 600;
+    }
+    .table-custom tbody tr:hover {
+      background-color: #f8f9fa;
+    }
+    .table-responsive {
+      margin-bottom: 1rem;
+    }
+    .data-highlight {
+      transition: all 0.3s;
+    }
+    .data-highlight:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    /* ================================= */
+    /* Navbar - Style copié depuis la page Analyse ABC */
+    /* ================================= */
+    .navbar {
+      background: #ffffff;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+      padding: 0.5rem 0;
+    }
+    .brand-container {
+      background: linear-gradient(135deg, #6366f1 0%, #3b82f6 100%);
+      border-radius: 12px;
+      padding: 0.75rem;
+      box-shadow: 0 2px 4px rgba(99,102,241,0.2);
+    }
+    .navbar-brand {
+      font-weight: 700;
+      font-size: 1.5rem;
+      color: #1f2937 !important;
+      letter-spacing: -0.5px;
+      margin-bottom: 0;
+    }
+    .brand-subtitle {
+      color: #6b7280;
+      font-size: 0.875rem;
+      font-weight: 400;
+      margin: 0;
+    }
+    .btn-new-analysis {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: #fff !important;
+      border: none;
+      border-radius: 8px;
+      padding: 0.75rem 1.5rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 2px 4px rgba(16,185,129,0.2);
+      text-decoration: none;
+    }
+    .btn-new-analysis:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 6px rgba(16,185,129,0.3);
+    }
+    /* Masquer l'icône sur mobile sans modifier le rendu en mode bureau */
+    @media (max-width: 576px) {
+      .hide-mobile {
+        display: none !important;
+      }
+      .btn-new-analysis {
+        padding: 0.5rem 1rem;
+        gap: 4px;
+        font-size: 0.875rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar avec le style copié -->
+  <nav class="navbar">
+    <div class="container d-flex justify-content-between align-items-center">
+      <div class="d-flex align-items-center">
+        <!-- L'icône disparaît sur mobile grâce à la classe "hide-mobile" -->
+        <div class="brand-container me-3 hide-mobile">
+          <i class="fas fa-chart-pie fa-lg text-white"></i>
+        </div>
+        <div>
+          <a class="navbar-brand" href="#">Carte de Contrôle</a>
+          <p class="brand-subtitle">Analyse Statistique de Processus</p>
+        </div>
+      </div>
+      <!-- Bouton "Nouvelle analyse" -->
+      <a href="/upload" class="btn-new-analysis">
+        <i class="fas fa-redo d-none d-sm-inline"></i>
+        Nouvelle analyse
+      </a>
+    </div>
+  </nav>
+
+  <!-- Contenu principal -->
+  <div class="container py-4">
+    <div class="row g-4">
+      <!-- Section Graphique Principal -->
+      <div class="col-lg-8">
+        <div class="card">
+          <div class="card-header bg-light">
+            <h4 class="h6 mb-0">
+              <i class="fas fa-chart-bar me-2"></i>
+              <% if(chartType === 'X') { %>
+                Graphe X-chart
+              <% } else { %>
+                Graphe R-chart
+              <% } %>
+            </h4>
+          </div>
+          <div class="card-body">
+            <div class="chart-container">
+              <canvas id="controlChart"></canvas>
+            </div>
+            <div class="d-flex justify-content-between">
+              <button class="btn btn-sm btn-outline-secondary" id="resetZoom">
+                <i class="fas fa-search-minus me-2"></i>Réinitialiser zoom
+              </button>
+              <button class="btn btn-sm btn-outline-success" id="exportPng">
+                <i class="fas fa-download me-2"></i>PNG
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Barre Latérale Statistiques -->
+      <div class="col-lg-4">
+        <div class="card">
+          <div class="card-header bg-light">
+            <h4 class="h6 mb-0">
+              <i class="fas fa-info-circle me-2"></i>Statistiques
+            </h4>
+          </div>
+          <div class="card-body">
+            <div class="mb-3 stat-card">
+              <h5 class="text-muted small mb-2">Limites de contrôle</h5>
+              <div class="d-flex justify-content-between mb-1">
+                <span>LCL:</span>
+                <span class="fw-bold" style="color: #ef4444;"><%= limits.LCL.toFixed(2) %></span>
+              </div>
+              <div class="d-flex justify-content-between mb-1">
+                <span>CL:</span>
+                <span class="fw-bold" style="color: #9333ea;"><%= limits.CL.toFixed(2) %></span>
+              </div>
+              <div class="d-flex justify-content-between">
+                <span>UCL:</span>
+                <span class="fw-bold" style="color: #22c55e;"><%= limits.UCL.toFixed(2) %></span>
+              </div>
+            </div>
+            <div class="stat-card">
+              <h5 class="text-muted small mb-2">Coefficients</h5>
+              <div class="d-flex justify-content-between mb-1">
+                <span>A2:</span>
+                <span class="fw-bold"><%= coefficients.A2 %></span>
+              </div>
+              <div class="d-flex justify-content-between mb-1">
+                <span>D3:</span>
+                <span class="fw-bold"><%= coefficients.D3 %></span>
+              </div>
+              <div class="d-flex justify-content-between">
+                <span>D4:</span>
+                <span class="fw-bold"><%= coefficients.D4 %></span>
+              </div>
+            </div>
+            <div class="stat-card mt-3">
+              <h5 class="text-muted small mb-2">Résumé des données</h5>
+              <div class="d-flex justify-content-between mb-1">
+                <span>Moyenne:</span>
+                <span class="fw-bold"><%= (limits.CL).toFixed(2) %></span>
+              </div>
+              <div class="d-flex justify-content-between mb-1">
+                <span>Écart-type:</span>
+                <span class="fw-bold"><%= (limits.UCL - limits.CL).toFixed(2) %></span>
+              </div>
+              <div class="d-flex justify-content-between">
+                <span>Échantillons:</span>
+                <span class="fw-bold"><%= chartData.datasets[0].data.length %></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section Tableau de Données -->
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header bg-light">
+            <h4 class="h6 mb-0">
+              <i class="fas fa-table me-2"></i>Données brutes
+            </h4>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-sm table-hover table-custom">
+                <thead>
+                  <tr>
+                    <th>Échantillon</th>
+                    <% chartData.datasets[0].data.forEach((_, index) => { %>
+                      <th class="text-end"><%= index + 1 %></th>
+                    <% }); %>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Valeur</td>
+                    <% chartData.datasets[0].data.forEach(point => { %>
+                      <td class="text-end"><%= point.toFixed(2) %></td>
+                    <% }); %>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Guide d'Interprétation -->
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header bg-light">
+            <h4 class="h6 mb-0">
+              <i class="fas fa-lightbulb me-2"></i>Guide d'interprétation
+            </h4>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="alert alert-success">
+                  <h5 class="h6 mb-2">Processus sous contrôle si :</h5>
+                  <ul class="mb-0">
+                    <li>Tous les points dans les limites</li>
+                    <li>Aucune tendance apparente</li>
+                    <li>Distribution aléatoire</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="alert alert-danger">
+                  <h5 class="h6 mb-2">Hors contrôle si :</h5>
+                  <ul class="mb-0">
+                    <li>Points hors limites</li>
+                    <li>7 points consécutifs d'un côté</li>
+                    <li>Tendance claire</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Script Chart.js -->
+  <script>
+    const chartData = <%- JSON.stringify(chartData) %>;
+    const ctx = document.getElementById('controlChart');
+    const config = {
+      type: 'line',
+      data: chartData,
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          zoom: {
+            zoom: { wheel: { enabled: true }, pinch: { enabled: true } },
+            pan: { enabled: true }
+          },
+          tooltip: { mode: 'index', intersect: false }
+        },
+        interaction: { mode: 'nearest', intersect: false },
+        scales: {
+          y: { 
+            beginAtZero: false, 
+            title: { 
+              display: true, 
+              text: '<%= chartType %>', 
+              font: { weight: 'bold' } 
+            } 
+          },
+          x: { 
+            title: { 
+              display: true, 
+              text: "Numéro d'échantillon", 
+              font: { weight: 'bold' } 
+            }, 
+            grid: { display: false } 
+          }
+        }
+      }
+    };
+    const chart = new Chart(ctx, config);
+
+    // Contrôles de zoom et export
+    document.getElementById('resetZoom').addEventListener('click', () => {
+      chart.resetZoom();
+    });
+
+    document.getElementById('exportPng').addEventListener('click', () => {
+      const imageLink = document.createElement('a');
+      imageLink.download = 'chart.png';
+      imageLink.href = chart.toBase64Image();
+      imageLink.click();
+    });
+  </script>
+  
+  <!-- Bootstrap Bundle JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

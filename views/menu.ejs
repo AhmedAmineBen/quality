@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quality Tools Suite | Plateforme d'analyse qualité</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Google Fonts : Inter et Montserrat -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #8e44ad; /* Violet profond */
+      --secondary-color: #9b59b6; /* Violet léger */
+      --accent-color: #F39C12;
+      --surface-color: #FFFFFF;
+      --text-primary: #1E293B;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%);
+      color: var(--text-primary);
+    }
+    /* Style spécifique pour la navbar */
+    nav.navbar a.navbar-brand {
+      color: var(--primary-color) !important;
+      font-family: 'Montserrat', sans-serif;
+    }
+    nav.navbar {
+      /* On peut également adapter d'autres éléments si nécessaire */
+    }
+    /* Hero Section */
+    .hero-section {
+      padding: 6rem 0 4rem;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: white;
+    }
+    .feature-card {
+      background: var(--surface-color);
+      border: none;
+      border-radius: 1rem;
+      padding: 2rem;
+      transition: transform 0.3s ease;
+      box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+    }
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 25px -5px rgba(0,0,0,0.1);
+    }
+    .tool-icon {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      border-radius: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 2rem;
+      margin: 0 auto 1.5rem;
+    }
+    .cta-button {
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.5rem;
+      font-weight: 600;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      border: none;
+      color: white;
+      transition: transform 0.2s ease;
+    }
+    .cta-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 10px rgba(142, 68, 173, 0.2);
+    }
+    .features-section {
+      padding: 4rem 0;
+      background: var(--surface-color);
+    }
+    .navbar img.logo {
+      height: 60px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-white py-3 shadow-sm">
+    <div class="container d-flex align-items-center justify-content-between">
+      <img src="/images/left-logo.png" alt="Logo gauche" class="logo me-2">
+      <a class="navbar-brand fw-bold text-uppercase mx-auto" href="#">
+        <span class="d-none d-sm-inline">
+          ÉCOLE NATIONALE SUPÉRIEURE D'ÉLECTRICITÉ ET MÉCANIQUE
+        </span>
+        <span class="d-inline d-sm-none">
+          ENSEM
+        </span>
+      </a>
+      <img src="/images/right-logo.png" alt="Logo droit" class="logo">
+    </div>
+  </nav>
+  
+  <!-- Section Principale -->
+  <section class="hero-section">
+    <div class="container text-center">
+      <h1 class="display-5 fw-bold mb-4">Bienvenue sur notre plateforme d'analyse qualité</h1>
+      <p class="lead mb-5">Solutions innovantes pour l'amélioration continue des processus industriels</p>
+      
+      <div class="row g-4 justify-content-center">
+        <!-- Outil 1 : Diagramme Pareto et Analyse ABC -->
+        <div class="col-md-5">
+          <div class="feature-card">
+            <div class="tool-icon">
+              <i class="fas fa-sort-amount-down-alt"></i>
+            </div>
+            <!-- Titre en noir et sous l'icône -->
+            <h3 class="mb-3 text-dark">Diagramme Pareto et Analyse ABC</h3>
+            <p class="text-muted mb-4">
+              Obtenez une vue synthétique des facteurs clés et priorisez vos actions efficacement.
+            </p>
+            <a href="/landing" class="cta-button btn">
+              <i class="fas fa-info-circle me-2"></i>En savoir plus
+            </a>
+          </div>
+        </div>
+
+        <!-- Outil 2 : Cartes de contrôle -->
+        <div class="col-md-5">
+          <div class="feature-card">
+            <div class="tool-icon">
+              <i class="fas fa-chart-line"></i>
+            </div>
+            <!-- Titre en noir et sous l'icône -->
+            <h3 class="mb-3 text-dark">Cartes de contrôle</h3>
+            <p class="text-muted mb-4">
+              Surveillance statistique des processus industriels et visualisation en temps réel de la performance.
+            </p>
+            <a href="/charts" class="cta-button btn">
+              <i class="fas fa-info-circle me-2"></i>En savoir plus
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Fonctionnalités Clés -->
+  <section class="features-section">
+    <div class="container">
+      <div class="text-center mb-5">
+        <h2 class="display-6 fw-bold mb-3">Fonctionnalités Clés</h2>
+        <p class="text-muted">Découvrez les avantages clés de notre solution d'analyse qualité</p>
+      </div>
+      <div class="row g-4">
+        <!-- Fonctionnalité 1 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="feature-card h-100">
+            <div class="tool-icon">
+              <i class="fas fa-lightbulb"></i>
+            </div>
+            <h4>Optimiser la prise de décision</h4>
+            <p class="text-muted">
+              Identifiez rapidement les éléments critiques grâce à une visualisation claire des priorités et des indicateurs statistiques.
+            </p>
+          </div>
+        </div>
+        <!-- Fonctionnalité 2 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="feature-card h-100">
+            <div class="tool-icon">
+              <i class="fas fa-tasks"></i>
+            </div>
+            <h4>Améliorer la gestion des ressources</h4>
+            <p class="text-muted">
+              Ciblez efficacement vos actions grâce à la classification ABC, en concentrant les efforts sur les éléments à forte valeur ajoutée.
+            </p>
+          </div>
+        </div>
+        <!-- Fonctionnalité 3 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="feature-card h-100">
+            <div class="tool-icon">
+              <i class="fas fa-shield-alt"></i>
+            </div>
+            <h4>Assurer le suivi et le contrôle de la qualité</h4>
+            <p class="text-muted">
+              Surveillez en temps réel la stabilité de vos processus avec des cartes de contrôle pour détecter et corriger les anomalies.
+            </p>
+          </div>
+        </div>
+        <!-- Fonctionnalité 4 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="feature-card h-100">
+            <div class="tool-icon">
+              <i class="fas fa-project-diagram"></i>
+            </div>
+            <h4>Simplifier l’analyse de données complexes</h4>
+            <p class="text-muted">
+              Transformez des données brutes en informations exploitables avec des graphiques interactifs comme le diagramme de Pareto et l'indice de Gini.
+            </p>
+          </div>
+        </div>
+        <!-- Fonctionnalité 5 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="feature-card h-100">
+            <div class="tool-icon">
+              <i class="fas fa-compass"></i>
+            </div>
+            <h4>Fournir des recommandations opérationnelles</h4>
+            <p class="text-muted">
+              Recevez des conseils personnalisés et des guides d’interprétation pour orienter les actions correctives et les améliorations.
+            </p>
+          </div>
+        </div>
+        <!-- Fonctionnalité 6 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="feature-card h-100">
+            <div class="tool-icon">
+              <i class="fas fa-eye"></i>
+            </div>
+            <h4>Renforcer la transparence et la traçabilité</h4>
+            <p class="text-muted">
+              Bénéficiez d'une vue d’ensemble détaillée et dynamique des données pour garantir un suivi précis et une communication claire.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
