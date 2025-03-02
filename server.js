@@ -6,7 +6,8 @@ const fs = require('fs');
 const path = require('path');
 
 const app = express();
-const upload = multer({ dest: 'uploads/' });
+// Utilisation du dossier temporaire pour Vercel
+const upload = multer({ dest: '/tmp/' });
 
 // Configuration EJS
 app.set('view engine', 'ejs');
@@ -137,7 +138,7 @@ function classifyGini(giniIndex) {
 }
 
 // Routes
-// La route "/" renvoie désormais à menu.ejs
+// La route "/" renvoie à menu.ejs
 app.get('/', (req, res) => res.render('menu'));
 
 // Route pour afficher landing.ejs (accessible depuis le bouton de menu)
@@ -248,7 +249,7 @@ const processControlChart = (file, chartType, callback) => {
 
     // Détection des colonnes numériques
     const numericCols = Object.keys(df[0]).filter(k => {
-      if(k === 'Echantillon') return false;
+      if (k === 'Echantillon') return false;
       const val = df[0][k];
       return !isNaN(parseFloat(val.toString().replace(',', '.')));
     });
@@ -271,7 +272,7 @@ const processControlChart = (file, chartType, callback) => {
     const R_bar = processed.reduce((a, v) => a + v.Etendues, 0) / processed.length;
 
     // Lecture des coefficients depuis file.csv
-    const coeffFile = fs.readFileSync('file.csv', 'utf-8').split('\n');
+    const coeffFile = fs.readFileSync(path.join(__dirname, 'file.csv'), 'utf-8').split('\n');
     const headers = coeffFile[0].split(',').map(h => h.trim());
     const coeffRow = coeffFile.slice(1).find(line => {
       const [nVal] = line.split(',').map(v => v.trim());
@@ -334,7 +335,7 @@ const processControlChart = (file, chartType, callback) => {
 
     callback(null, {
       chartType: chartType.toUpperCase(),
-      chartData: chartData, // On passe directement l'objet
+      chartData: chartData,
       limits: limits[chartType.toUpperCase()],
       coefficients: { A2, D3, D4 }
     });
@@ -355,4 +356,9 @@ app.post('/control-charts', upload.single('datafile'), (req, res) => {
   });
 });
 
-app.listen(3000, () => console.log('Serveur démarré: http://localhost:3000'));
+// Export de l'application pour Vercel ou démarrage local
+if (process.env.VERCEL) {
+  module.exports = app;
+} else {
+  app.listen(3000, () => console.log('Serveur démarré: http://localhost:3000'));
+}
