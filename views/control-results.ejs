@@ -54,7 +54,7 @@
       box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.1);
       margin-bottom: 1rem;
     }
-    /* Réduction de la hauteur sur mobile */
+    /* Sur mobile, on réduit la hauteur du graphique */
     @media (max-width: 576px) {
       .chart-container {
         height: 40vh;
@@ -132,8 +132,6 @@
       mask-composite: exclude;
       pointer-events: none;
     }
-    
-    /* (Les styles relatifs à la navbar sont désormais obsolètes) */
   </style>
 </head>
 <body class="h-full bg-slate-50">
@@ -150,7 +148,7 @@
           </p>
         </div>
         
-        <a href="/upload" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 border border-transparent text-sm font-medium rounded-lg shadow-sm text-white bg-gradient-to-r from-indigo-600 to-blue-500 hover:from-indigo-700 hover:to-blue-600 transition-all duration-200 hover:shadow-md transform hover:-translate-y-0.5">
+        <a href="/control-charts" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 border border-transparent text-sm font-medium rounded-lg shadow-sm text-white bg-gradient-to-r from-indigo-600 to-blue-500 hover:from-indigo-700 hover:to-blue-600 transition-all duration-200 hover:shadow-md transform hover:-translate-y-0.5">
           <i class="fas fa-plus-circle text-sm"></i>
           Nouvelle analyse
         </a>
@@ -321,6 +319,24 @@
 
   <!-- Script Chart.js -->
   <script>
+    // Utilisation de matchMedia pour détecter un écran mobile
+    const isMobile = window.matchMedia('(max-width:576px)').matches;
+    
+    const legendOptions = {
+      position: isMobile ? 'bottom' : 'top',
+      labels: {
+        font: {
+          size: isMobile ? 10 : 12,
+          family: "'Inter', sans-serif",
+          style: isMobile ? 'normal' : 'italic',
+          weight: isMobile ? 'normal' : 'bold'
+        },
+        color: isMobile ? '#666' : '#333',
+        padding: isMobile ? 8 : 12,
+        boxWidth: isMobile ? 10 : 12
+      }
+    };
+
     const chartData = <%- JSON.stringify(chartData) %>;
     const ctx = document.getElementById('controlChart');
     const config = {
@@ -335,12 +351,7 @@
             pan: { enabled: true }
           },
           tooltip: { mode: 'index', intersect: false },
-          legend: {
-            labels: {
-              // Réduction de la taille de la légende sur mobile
-              font: { size: window.innerWidth < 576 ? 10 : 12 }
-            }
-          }
+          legend: legendOptions
         },
         interaction: { mode: 'nearest', intersect: false },
         scales: {
@@ -349,20 +360,21 @@
             title: { 
               display: true, 
               text: '<%= chartType %>', 
-              font: { weight: 'bold' } 
-            } 
+              font: { weight: 'bold' }
+            }
           },
           x: { 
             title: { 
               display: true, 
               text: "Numéro d'échantillon", 
-              font: { weight: 'bold' } 
+              font: { weight: 'bold' }
             }, 
-            grid: { display: false } 
+            grid: { display: false }
           }
         }
       }
     };
+    
     const chart = new Chart(ctx, config);
 
     // Contrôles de zoom et export
