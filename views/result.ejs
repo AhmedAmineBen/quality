@@ -24,68 +24,11 @@
       background-color: #f4f7fa;
       color: #333;
     }
-    
-    /* Navbar */
-    .navbar {
-      background: #ffffff;
-      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
-      padding: 0.5rem 0;
+
+    .header-gradient {
+      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
     }
-    .brand-container {
-      background: linear-gradient(135deg, #6366f1 0%, #3b82f6 100%);
-      border-radius: 12px;
-      padding: 0.75rem;
-      box-shadow: 0 2px 4px rgba(99,102,241,0.2);
-    }
-    .navbar-brand {
-      font-weight: 700;
-      font-size: 1.5rem;
-      color: #1f2937 !important;
-      letter-spacing: -0.5px;
-      margin-bottom: 0;
-    }
-    .brand-subtitle {
-      color: #6b7280;
-      font-size: 0.875rem;
-      font-weight: 400;
-      margin: 0;
-    }
-    .btn-new-analysis {
-      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-      color: #fff !important;
-      border: none;
-      border-radius: 8px;
-      padding: 0.75rem 1.5rem;
-      font-weight: 500;
-      transition: all 0.3s ease;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      box-shadow: 0 2px 4px rgba(16,185,129,0.2);
-      text-decoration: none;
-    }
-    .btn-new-analysis:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 4px 6px rgba(16,185,129,0.3);
-    }
-    
-    /* Masquer l'icône sur mobile sans modifier le rendu en mode bureau */
-    @media (max-width: 576px) {
-      .hide-mobile {
-        display: none !important;
-      }
-      .btn-new-analysis {
-        padding: 0.5rem 1rem;
-        gap: 4px;
-        font-size: 0.875rem;
-      }
-    }
-    
-    /* Autres styles (gradient-border, responsive, etc.) */
-    .gradient-border {
-      position: relative;
-      background: white;
-    }
+
     .gradient-border::before {
       content: '';
       position: absolute;
@@ -102,61 +45,35 @@
       mask-composite: exclude;
       pointer-events: none;
     }
-    @media (max-width: 640px) {
-      .chart-container {
-        padding-left: 0.5rem !important;
-        padding-right: 0.5rem !important;
-      }
-      .category-tabs {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-      }
-      .category-tab {
-        padding: 0.5rem;
-        font-size: 0.875rem;
-        justify-content: center;
-      }
-      .category-header {
-        flex-direction: column;
-        gap: 0.5rem;
-      }
-      .category-badge {
-        width: 100%;
-        justify-content: center;
-      }
-      .data-card {
-        padding: 1rem;
-      }
-    }
   </style>
 </head>
 <body class="h-full bg-slate-50">
   
-  <!-- Navbar améliorée -->
-  <nav class="navbar">
-    <div class="container d-flex justify-content-between align-items-center">
-      <div class="d-flex align-items-center">
-        <!-- L'icône disparaît sur mobile grâce à la classe personnalisée "hide-mobile" -->
-        <div class="brand-container me-3 hide-mobile">
-          <i class="fas fa-chart-pie fa-lg text-white"></i>
+  <!-- Nouveau Header Moderne -->
+  <header class="header-gradient border-b border-slate-200">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+        <div class="space-y-2 max-w-3xl">
+          <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight leading-tight">
+            Rapport d'Analyse ABC
+          </h1>
+          <p class="text-sm sm:text-base text-slate-600">
+            Analyse stratégique des priorités selon la méthodologie ABC - Classement des éléments critiques
+          </p>
         </div>
-        <div>
-          <a class="navbar-brand" href="#">Rapport de l'Analyse</a>
-          <p class="brand-subtitle">Analyse des priorités et classification des éléments</p>
-        </div>
+        
+        <a href="/upload" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 border border-transparent text-sm font-medium rounded-lg shadow-sm text-white bg-gradient-to-r from-indigo-600 to-blue-500 hover:from-indigo-700 hover:to-blue-600 transition-all duration-200 hover:shadow-md transform hover:-translate-y-0.5">
+          <i class="fas fa-plus-circle text-sm"></i>
+          Nouvelle analyse
+        </a>
       </div>
-      <!-- Le bouton affiche toujours le texte complet, l'icône à l'intérieur est masquée sur mobile via Bootstrap -->
-      <a href="/upload" class="btn-new-analysis">
-        <i class="fas fa-redo d-none d-sm-inline"></i>
-        Nouvelle analyse
-      </a>
     </div>
-  </nav>
-  
-  <!-- Reste du contenu de la page -->
-  <!-- Cartes indicateurs -->
+  </header>
+
+  <!-- Contenu Principal -->
   <div class="container mx-auto px-4 py-8 max-w-7xl">
-    <!-- Section indicateurs avec gradient-border -->
-    <div class="gradient-border rounded-2xl bg-white shadow-xl p-4 sm:p-8 mb-8">
+    <!-- Section Indicateurs -->
+    <div class="gradient-border rounded-2xl bg-white shadow-xl p-4 sm:p-8 mb-8 relative">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 mb-8 sm:mb-12">
         <div class="data-card bg-white p-4 sm:p-6 rounded-xl shadow-sm border-l-4 border-indigo-500">
           <div class="text-gray-500 text-sm font-medium mb-2">Indice de Gini</div>
@@ -186,9 +103,9 @@
         </div>
         <% } %>
       </div>
-      
+
       <!-- Graphique Pareto -->
-      <div class="bg-white p-2 sm:p-6 rounded-xl shadow-sm mb-8 sm:mb-12 chart-container">
+      <div class="bg-white p-2 sm:p-6 rounded-xl shadow-sm mb-8 sm:mb-12">
         <div class="flex flex-wrap justify-between items-center mb-4 sm:mb-6 gap-2">
           <h3 class="text-lg font-semibold text-gray-900">Diagramme de Pareto</h3>
           <div class="flex gap-1 sm:gap-2">
@@ -210,10 +127,10 @@
           <canvas id="paretoChart"></canvas>
         </div>
       </div>
-      
-      <!-- Contenu principal avec AlpineJS -->
+
+      <!-- Contenu avec AlpineJS -->
       <div x-data="{ activeTab: 'A' }" class="grid lg:grid-cols-3 gap-6">
-        <!-- Colonne de recommandations -->
+        <!-- Colonne Recommandations -->
         <div class="lg:col-span-1 bg-white p-4 sm:p-6 rounded-xl shadow-sm h-fit lg:sticky lg:top-8">
           <div class="mb-6">
             <h3 class="text-lg font-semibold text-gray-900 mb-4">Recommandations</h3>
@@ -256,30 +173,21 @@
             </dl>
           </div>
         </div>
-        
-        <!-- Onglets des catégories -->
+
+        <!-- Onglets Catégories -->
         <div class="lg:col-span-2">
           <div class="border-b border-gray-200 mb-6">
-            <nav class="grid grid-cols-3 gap-2 category-tabs" aria-label="Tabs">
-              <button
-                @click="activeTab = 'A'"
-                :class="activeTab === 'A' ? 'border-emerald-500 text-emerald-600' : 'border-transparent text-gray-500 hover:text-gray-700'"
-                class="category-tab pb-2 sm:pb-4 px-1 border-b-2 font-medium text-sm transition-colors flex items-center justify-center"
-              >
+            <nav class="grid grid-cols-3 gap-2" aria-label="Tabs">
+              <button @click="activeTab = 'A'" :class="activeTab === 'A' ? 'border-emerald-500 text-emerald-600' : 'border-transparent text-gray-500 hover:text-gray-700'"
+                class="pb-2 sm:pb-4 px-1 border-b-2 font-medium text-sm transition-colors flex items-center justify-center">
                 Catégorie A
               </button>
-              <button
-                @click="activeTab = 'B'"
-                :class="activeTab === 'B' ? 'border-amber-500 text-amber-600' : 'border-transparent text-gray-500 hover:text-gray-700'"
-                class="category-tab pb-2 sm:pb-4 px-1 border-b-2 font-medium text-sm transition-colors flex items-center justify-center"
-              >
+              <button @click="activeTab = 'B'" :class="activeTab === 'B' ? 'border-amber-500 text-amber-600' : 'border-transparent text-gray-500 hover:text-gray-700'"
+                class="pb-2 sm:pb-4 px-1 border-b-2 font-medium text-sm transition-colors flex items-center justify-center">
                 Catégorie B
               </button>
-              <button
-                @click="activeTab = 'C'"
-                :class="activeTab === 'C' ? 'border-rose-500 text-rose-600' : 'border-transparent text-gray-500 hover:text-gray-700'"
-                class="category-tab pb-2 sm:pb-4 px-1 border-b-2 font-medium text-sm transition-colors flex items-center justify-center"
-              >
+              <button @click="activeTab = 'C'" :class="activeTab === 'C' ? 'border-rose-500 text-rose-600' : 'border-transparent text-gray-500 hover:text-gray-700'"
+                class="pb-2 sm:pb-4 px-1 border-b-2 font-medium text-sm transition-colors flex items-center justify-center">
                 Catégorie C
               </button>
             </nav>
@@ -289,7 +197,7 @@
           %>
           <div x-show="activeTab === '<%= cat %>'" x-cloak>
             <div class="bg-white rounded-lg shadow-sm p-4 sm:p-6">
-              <div class="category-header flex flex-col sm:flex-row justify-between items-start mb-4 gap-2">
+              <div class="flex flex-col sm:flex-row justify-between items-start mb-4 gap-2">
                 <div>
                   <h4 class="text-base font-semibold text-gray-900">
                     <%= items.length %> éléments
@@ -300,7 +208,7 @@
                       `Surveillance minimale (> ${giniClassification.bMax}%)` %>
                   </p>
                 </div>
-                <span class="category-badge inline-flex items-center px-3 py-1 rounded-full text-xs sm:text-sm font-medium 
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs sm:text-sm font-medium 
                     <%= cat === 'A' ? 'bg-emerald-100 text-emerald-800' : 
                       cat === 'B' ? 'bg-amber-100 text-amber-800' : 
                       'bg-rose-100 text-rose-800' %>">
@@ -333,9 +241,9 @@
         </div>
       </div>
     </div>
-    
-    <!-- Tableau réactif -->
-    <div class="bg-white rounded-xl shadow-lg p-4 sm:p-6 mt-6 gradient-border">
+
+    <!-- Tableau Réactif -->
+    <div class="bg-white rounded-xl shadow-lg p-4 sm:p-6 mt-6 gradient-border relative">
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
         <div>
           <h3 class="text-lg sm:text-xl font-bold text-gray-900">Répartition détaillée</h3>
@@ -428,7 +336,7 @@
       </div>
     </div>
   </div>
-  
+
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const ctx = document.getElementById('paretoChart').getContext('2d');
