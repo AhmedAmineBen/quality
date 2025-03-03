@@ -4,160 +4,180 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Analyse ABC/XYZ Pro</title>
+    
+    <!-- Frameworks -->
     <link
-      href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.0/dist/lux/bootstrap.min.css"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
     <link
       rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+      href="https://cdn.jsdelivr.net/npm/@mdi/font@7.2.96/css/materialdesignicons.min.css"
     />
-    <!-- Import de la police Google Poppins -->
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap"
-      rel="stylesheet"
-    />
+    
     <style>
       :root {
-        /* Palette modernisée et professionnelle */
-        --primary-color: #0d6efd; /* Bleu moderne */
-        --secondary-color: #6c757d; /* Gris neutre */
-        --accent-color: #0dcaf0; /* Accent cyan frais */
-        --background-gradient-start: #e9ecef; /* Gris très clair */
-        --background-gradient-end: #f8f9fa; /* Blanc cassé */
-        --text-color: #212529; /* Texte sombre */
+        --primary-500: #6366f1;
+        --primary-600: #4f46e5;
+        --surface-50: #f8fafc;
+        --surface-100: #f1f5f9;
+        --success-500: #22c55e;
+        --danger-500: #ef4444;
+        --glass-bg: rgba(255, 255, 255, 0.95);
+        --border-color: rgba(203, 213, 225, 0.3);
         --header-gradient: linear-gradient(45deg, #0d6efd, #0a58ca);
       }
+    
       body {
-        font-family: 'Poppins', sans-serif;
-        background: linear-gradient(
-          135deg,
-          var(--background-gradient-start),
-          var(--background-gradient-end)
-        );
-        color: var(--text-color);
+        font-family: 'Poppins', system-ui, -apple-system, sans-serif;
+        background: linear-gradient(135deg, var(--surface-50), var(--surface-100));
         min-height: 100vh;
+        color: #212529;
       }
+    
       .main-container {
         max-width: 900px;
         padding: 2rem 1rem;
         margin: auto;
       }
+    
       header {
-        margin-bottom: 2rem;
+        text-align: center;
+        padding: 2rem 0;
       }
+    
+      /* Style du titre */
       .main-title {
         font-weight: 700;
         letter-spacing: -0.5px;
         background: var(--header-gradient);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
+        font-size: 3rem;
       }
-      /* Style de la section */
-      .section-header {
-        font-weight: 600;
-        font-size: 1.5rem;
-        color: var(--primary-color);
-        border-bottom: 3px solid var(--primary-color);
-        padding-bottom: 0.5rem;
-        margin: 1rem 0 1.5rem;
+    
+      /* Sous-titre */
+      .fs-4 {
+        font-size: 1.1rem;
+        line-height: 1.5;
+        padding-bottom: 1rem;
       }
-      .import-method-header {
-        margin-top: 3rem;
+    
+      /* Effet Glass Panel */
+      .glass-panel {
+        background: var(--glass-bg);
+        backdrop-filter: blur(12px);
+        border: 1px solid var(--border-color);
+        box-shadow: 0 8px 32px rgba(31, 38, 135, 0.05);
+        border-radius: 1.5rem;
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       }
+      .glass-panel:hover {
+        transform: translateY(-2px);
+      }
+    
+      /* Style des cartes d'analyse */
       .analysis-card {
         border: none;
         border-radius: 1rem;
         background: #fff;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
         transition: transform 0.3s ease, box-shadow 0.3s ease;
+        margin-bottom: 1.5rem;
       }
       .analysis-card:hover {
         transform: translateY(-5px);
         box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
       }
+    
+      /* Options d'analyse */
       .analysis-option {
         padding: 1.25rem;
-        border-radius: 0.75rem !important;
+        border-radius: 0.75rem;
+        border: 1px solid #ccc; /* Bordure grise moderne */
         transition: background-color 0.2s ease;
         cursor: pointer;
+        margin-bottom: 1rem;
       }
       .analysis-option:hover {
         background-color: rgba(13, 110, 253, 0.1);
+        border-color: var(--primary-500);
       }
       .option-title {
         font-weight: 500;
-        color: var(--primary-color);
+        color: var(--primary-500);
         font-size: 1.1rem;
+        margin-bottom: 0.5rem;
       }
       .option-description {
-        color: var(--secondary-color);
+        color: #6c757d;
         font-size: 0.95rem;
         line-height: 1.5;
       }
-      /* Navigation par onglets */
-      .nav-pills {
-        display: flex;
-        justify-content: center;
+    
+      /* Section ABC – masquée par défaut */
+      #abcCustomization {
+        display: none;
+        margin-top: 1.5rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid var(--border-color);
+      }
+      #abcCustomization .form-label {
+        font-weight: 500;
         margin-bottom: 1rem;
       }
-      .nav.nav-pills > .nav-item {
-        margin: 0;
+      /* Inputs minimalistes pour ABC */
+      #abcCustomization .input-group-text {
+        background: transparent;
+        border: none;
+        border-bottom: 2px solid #eee;
+        padding: 0.75rem 1rem;
+        color: #6c757d;
       }
-      .nav-pills .nav-link {
-        font-weight: 500;
+      #abcCustomization .form-control {
+        background: #f7f7f7;
+        border: none;
+        border-bottom: 2px solid #eee;
+        border-radius: 0;
+        padding: 0.75rem 1rem;
+        transition: border-color 0.3s, box-shadow 0.3s;
+      }
+      #abcCustomization .form-control:focus {
+        border-bottom: 2px solid var(--primary-500);
+        box-shadow: none;
+      }
+      #sumAlert {
+        font-size: 0.9rem;
+      }
+    
+      /* Navigation par onglets – boutons de sélection */
+      .nav-tabs {
+        justify-content: center;
+        border-bottom: none;
+      }
+      .nav-tabs .nav-link {
+        font-weight: 600;
         padding: 0.75rem 2rem;
-        border-radius: 50rem;
-        transition: background-color 0.3s, color 0.3s, opacity 0.3s;
-        margin: 0;
-        text-align: center;
+        border: 2px solid transparent;
+        border-radius: 30px;
+        transition: all 0.3s ease;
+        margin: 0 0.5rem;
+        background: var(--surface-50);
+        color: #6c757d;
       }
-      .nav-pills .nav-link.active {
-        background-color: var(--primary-color) !important;
-        color: #fff !important;
-        opacity: 1;
+      .nav-tabs .nav-link.active {
+        background: var(--primary-500);
+        color: #fff;
+        border-color: var(--primary-500);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
       }
-      .nav-pills .nav-link:not(.active),
-      .nav-pills .nav-link.inactive-tab {
-        background-color: #e9ecef !important;
-        color: var(--secondary-color) !important;
-        opacity: 0.7;
+      .nav-tabs .nav-link:hover:not(.active) {
+        background: #e2e8f0;
+        border-color: var(--primary-500);
+        color: var(--primary-500);
       }
-      @media (max-width: 768px) {
-        .main-container {
-          padding: 1.5rem 0.5rem;
-        }
-        .section-header {
-          font-size: 1.3rem;
-        }
-        .nav-pills .nav-link {
-          width: 100%;
-          margin: 0 0 0.5rem 0;
-        }
-      }
-      @media (max-width: 576px) {
-        .main-title.display-4 {
-          font-size: 2rem;
-        }
-        .section-header {
-          font-size: 1.1rem;
-        }
-        .nav-pills .nav-link {
-          font-size: 0.8rem;
-          padding: 0.5rem 1rem;
-        }
-        .display-3 {
-          font-size: 2.5rem;
-        }
-        .display-5 {
-          font-size: 1.8rem;
-        }
-        .custom-file-upload label {
-          font-size: 0.9rem;
-          padding: 0.5rem 1rem;
-        }
-      }
-      /* Style personnalisé pour le sélecteur de fichier */
+    
+      /* Sélecteur de fichier personnalisé */
       .custom-file-upload label {
         cursor: pointer;
         transition: background-color 0.3s, transform 0.3s;
@@ -165,320 +185,347 @@
         border-radius: 50rem;
       }
       .custom-file-upload label:hover {
-        background-color: var(--primary-color);
+        background-color: var(--primary-500);
         color: #fff;
         transform: scale(1.03);
       }
-      .bg-primary-light {
-        background: rgba(13, 110, 253, 0.08);
-        border-radius: 0.5rem;
-        padding: 1.5rem;
+    
+      .drag-drop-zone {
+        border: 2px dashed #cbd5e1;
+        border-radius: 1rem;
+        background: rgba(241, 245, 249, 0.5);
+        transition: all 0.3s ease;
       }
-      .confirmation-box {
-        background: #e9f7ef;
-        border: 2px solid #28a745;
-        border-radius: 0.75rem;
-        padding: 1rem;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+      .drag-drop-zone.dragover {
+        border-color: var(--primary-500);
+        background: rgba(99, 102, 241, 0.05);
       }
-      /* Personnalisation des boutons */
-      .btn-primary {
-        background-color: var(--primary-color);
-        border-color: var(--primary-color);
-        transition: background-color 0.3s, border-color 0.3s;
+      .file-format-hint {
+        font-size: 0.9rem;
+        color: #64748b;
+        margin-top: 0.5rem;
       }
-      .btn-primary:hover {
-        background-color: #0a58ca;
-        border-color: #0a58ca;
+      .confirmation-badge {
+        background: rgba(34, 197, 94, 0.1);
+        border: 1px solid var(--success-500);
+        color: var(--success-500);
+        transition: all 0.3s ease;
       }
-      .btn-success {
-        background-color: #28a745;
-        border-color: #28a745;
+      .floating-action {
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
       }
-      .btn-warning {
-        background-color: var(--accent-color);
-        border-color: var(--accent-color);
-        color: #212529;
+      .floating-action:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px -1px rgba(0, 0, 0, 0.15);
       }
-      .btn-danger {
-        background-color: #dc3545;
-        border-color: #dc3545;
-      }
-      input.form-control:focus,
-      .form-control:focus {
-        box-shadow: none;
-        border-color: var(--primary-color);
-      }
-      /* Nouveau style pour le bouton Retour à landing */
-      .btn-return {
-        background: var(--header-gradient);
-        border: none;
-        color: #fff;
-        padding: 0.75rem 1.5rem;
-        border-radius: 50rem;
-        transition: background 0.3s, transform 0.3s;
-      }
-      .btn-return:hover {
-        background: #0a58ca;
-        transform: scale(1.03);
+      .input-highlight:focus {
+        border-color: var(--primary-500);
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
       }
     </style>
   </head>
-  <body class="bg-light">
-    <div class="main-container container py-4">
-      <!-- En-tête avec le style du titre et du bouton modifié (l'icône a été supprimée) -->
-      <header class="text-center py-4">
-        <h1 class="main-title display-4 mb-3">
+  <body class="d-flex flex-column">
+    <div class="container py-4 my-auto">
+      <!-- En-tête -->
+      <header class="text-center mb-3">
+        <h1 class="display-4 fw-bold mb-3 main-title">
           Diagramme Pareto <br /> - Analyse ABC -
         </h1>
-        <a href="/landing" class="btn btn-return mt-2">
-          <i class="bi bi-arrow-left me-2"></i>Retour à l'accueil
+        <div class="fs-4 text-muted mt-2">
+          Obtenez une vue synthétique des facteurs clés et priorisez vos actions efficacement
+        </div>
+        <a href="/landing">
+          <button type="button" class="btn btn-outline-secondary mdi mdi-arrow-left" style="margin-top: 1rem;"> Retour à l'accueil</button>
         </a>
       </header>
-      <!-- Formulaire principal -->
+              
       <form action="/upload" method="POST" enctype="multipart/form-data">
-        <!-- Section Type d'analyse -->
-        <div class="analysis-card card mb-4">
-          <div class="card-body">
-            <h2 class="section-header">Configuration de l'analyse</h2>
-            <div class="list-group">
-              <label class="list-group-item analysis-option">
-                <div class="form-check w-100">
-                  <input class="form-check-input me-3" type="radio" name="analysisType" value="gini" id="giniRadio" checked />
-                  <label class="form-check-label" for="giniRadio">
-                    <div class="option-title">Analyse Gini Automatique</div>
-                    <div class="option-description">
-                      Classification intelligente basée sur la distribution des données
-                    </div>
-                  </label>
-                </div>
-              </label>
-              <label class="list-group-item analysis-option">
-                <div class="form-check w-100">
-                  <input class="form-check-input me-3" type="radio" name="analysisType" value="abc" id="abcRadio" />
-                  <label class="form-check-label" for="abcRadio">
-                    <div class="option-title">Analyse ABC Personnalisée</div>
-                    <div class="option-description">
-                      Définissez vos propres seuils de classification
-                    </div>
-                  </label>
-                </div>
-              </label>
-            </div>
-            <!-- Configuration ABC -->
-            <div id="abcCustomization" class="mt-4 pt-3 border-top" style="display: none;">
-              <div class="mb-3">
-                <label class="form-label fw-bold">Répartition personnalisée :</label>
-                <div class="row g-3">
-                  <div class="col-md-4">
-                    <div class="input-group">
-                      <input type="number" step="0.1" class="form-control" name="classA" id="classA" placeholder="0.0" min="0" max="100" required />
-                      <span class="input-group-text">% Classe A</span>
+        <div class="row g-4 justify-content-center">
+          <!-- Configuration d'analyse -->
+          <div class="col-lg-6">
+            <div class="glass-panel p-4 mb-4">
+              <h3 class="h5 fw-semibold mb-4 d-flex align-items-center">
+                <i class="mdi mdi-cog-outline text-primary me-2"></i>
+                Configuration d'analyse
+              </h3>
+              <div class="vstack gap-3">
+                <!-- Option Gini -->
+                <label class="analysis-option p-3">
+                  <div class="form-check d-flex align-items-center">
+                    <input class="form-check-input" type="radio" name="analysisType" value="gini" id="giniRadio" checked>
+                    <div class="ms-3">
+                      <div class="d-flex align-items-center mb-1">
+                        <!-- Icône supprimée -->
+                        <span class="fw-semibold">Mode Automatique</span>
+                      </div>
+                      <small class="text-muted">Classification basée sur l'indice de Gini</small>
                     </div>
                   </div>
-                  <div class="col-md-4">
-                    <div class="input-group">
-                      <input type="number" step="0.1" class="form-control" name="classB" id="classB" placeholder="0.0" min="0" max="100" required />
-                      <span class="input-group-text">% Classe B</span>
+                </label>
+                <!-- Option ABC -->
+                <label class="analysis-option p-3">
+                  <div class="form-check d-flex align-items-center">
+                    <input class="form-check-input" type="radio" name="analysisType" value="abc" id="abcRadio">
+                    <div class="ms-3">
+                      <div class="d-flex align-items-center mb-1">
+                        <!-- Icône supprimée -->
+                        <span class="fw-semibold">Mode Personnalisé</span>
+                      </div>
+                      <small class="text-muted">Définissez vos propres paramètres</small>
                     </div>
                   </div>
-                  <div class="col-md-4">
-                    <div class="input-group">
-                      <input type="number" step="0.1" class="form-control" name="classC" id="classC" placeholder="0.0" min="0" max="100" required />
-                      <span class="input-group-text">% Classe C</span>
+                  <!-- Configuration ABC -->
+                  <div id="abcCustomization" class="mt-4 pt-3 border-top" style="display: none;">
+                    <div class="row g-3">
+                      <div class="col-12">
+                        <label class="form-label fw-semibold">Répartition des classes</label>
+                        <div class="vstack gap-2">
+                          <div class="input-group">
+                            <span class="input-group-text w-40">Classe A</span>
+                            <input type="number" class="form-control input-highlight" name="classA" step="0.1" required>
+                            <span class="input-group-text">%</span>
+                          </div>
+                          <div class="input-group">
+                            <span class="input-group-text w-40">Classe B</span>
+                            <input type="number" class="form-control input-highlight" name="classB" step="0.1" required>
+                            <span class="input-group-text">%</span>
+                          </div>
+                          <div class="input-group">
+                            <span class="input-group-text w-40">Classe C</span>
+                            <input type="number" class="form-control input-highlight" name="classC" step="0.1" required>
+                            <span class="input-group-text">%</span>
+                          </div>
+                        </div>
+                        <div class="mt-3 alert alert-danger py-2" id="sumAlert" style="display: none;">
+                          Total : <strong><span id="totalSum">0.0</span>%</strong> - Doit faire exactement 100%
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div class="mt-2">
-                  <div id="sumAlert" class="alert alert-danger py-2" role="alert" style="display: none;">
-                    Total actuel : <strong><span id="totalSum">0.0</span>%</strong> - Doit faire exactement 100%
-                  </div>
-                </div>
+                </label>
               </div>
             </div>
           </div>
-        </div>
-        <!-- Section Méthode d'importation des données -->
-        <h2 class="section-header import-method-header">Méthode d'importation des données</h2>
-        <!-- Navigation par onglets -->
-        <ul class="nav nav-pills" id="importMethodTabs" role="tablist">
-          <li class="nav-item" role="presentation">
-            <button class="nav-link active" id="file-tab" data-bs-toggle="pill" data-bs-target="#filePane" type="button" aria-selected="true" role="tab">
-              <i class="bi bi-file-earmark-arrow-up me-2"></i>Importer un fichier
-            </button>
-          </li>
-          <li class="nav-item" role="presentation">
-            <button class="nav-link inactive-tab" id="manual-tab" data-bs-toggle="pill" data-bs-target="#manualPane" type="button" aria-selected="false" tabindex="-1" role="tab">
-              <i class="bi bi-keyboard me-2"></i>Saisir manuellement
-            </button>
-          </li>
-        </ul>
-        <!-- Contenu des onglets -->
-        <div class="analysis-card card">
-          <div class="card-body">
-            <div class="tab-content">
-              <!-- Onglet Fichier -->
-              <div class="tab-pane fade show active" id="filePane">
-                <div class="text-center">
-                  <i class="bi bi-file-earmark-arrow-up display-3 text-primary"></i>
-                  <h3 class="h4 my-3">Importation par fichier</h3>
-                  <p class="text-muted mb-4">Formats supportés : CSV, XLSX</p>
-                  <div class="custom-file-upload">
-                    <label for="fileInput" class="btn btn-primary btn-lg">
-                      <i class="bi bi-cloud-upload me-2"></i>Choisir un fichier
-                      <input type="file" id="fileInput" name="datafile" class="d-none" accept=".csv, .xlsx" onchange="updateFileName(this)" />
-                    </label>
-                    <div id="fileNameDisplay" class="text-muted small mt-3">
-                      <i class="bi bi-file-earmark-text me-1"></i><span>Aucun fichier sélectionné</span>
+          
+          <!-- Importation des données -->
+          <div class="col-lg-6">
+            <div class="glass-panel p-4">
+              <h3 class="h5 fw-semibold mb-4 d-flex align-items-center">
+                <i class="mdi mdi-database-import text-primary me-2"></i>
+                Source des données
+              </h3>
+              <!-- Boutons de sélection (Onglets) -->
+              <ul class="nav nav-tabs mb-4" id="importTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link active" id="file-tab" data-bs-toggle="tab" data-bs-target="#filePane" type="button">
+                    <i class="mdi mdi-file-upload-outline me-2"></i>
+                    Fichier
+                  </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="manual-tab" data-bs-toggle="tab" data-bs-target="#manualPane" type="button">
+                    <i class="mdi mdi-keyboard-outline me-2"></i>
+                    Manuel
+                  </button>
+                </li>
+              </ul>
+      
+              <div class="tab-content">
+                <!-- Onglet Fichier -->
+                <div class="tab-pane fade show active" id="filePane">
+                  <div class="drag-drop-zone p-5 text-center position-relative">
+                    <i class="mdi mdi-cloud-upload-outline display-4 text-muted mb-3"></i>
+                    <div class="mb-3">
+                      <input type="file" class="form-control" name="datafile" id="fileInput" accept=".csv, .xlsx" hidden>
+                      <label for="fileInput" class="btn btn-lg btn-primary floating-action">
+                        <i class="mdi mdi-file-import me-2"></i>
+                        Sélectionner un fichier
+                      </label>
+                      <div class="file-format-hint">
+                        Formats autorisés : CSV, XLSX (Excel)
+                      </div>
                     </div>
-                    <div id="removeFileButton" class="mt-3" style="display: none;">
-                      <button type="button" class="btn btn-danger btn-sm" onclick="removeFile()">
-                        <i class="bi bi-trash me-1"></i>Supprimer
-                      </button>
+                    <div id="fileStatus" class="text-muted small mt-2">
+                      Aucun fichier sélectionné
                     </div>
                   </div>
                 </div>
-              </div>
-              <!-- Onglet Manuel -->
-              <div class="tab-pane fade" id="manualPane">
-                <div class="manual-entry">
-                  <div class="text-center mb-4">
-                    <i class="bi bi-keyboard display-5 text-success"></i>
-                    <h3 class="h4 mt-3 mb-4">Saisie manuelle</h3>
-                  </div>
-                  <div id="inputRows" class="mb-3">
-                    <div class="row g-2 mb-2">
-                      <div class="col-7">
-                        <input type="text" class="form-control form-control-sm" name="problem[]" placeholder="Description de l'élement" required />
+      
+                <!-- Onglet Manuel -->
+                <div class="tab-pane fade" id="manualPane">
+                  <div class="vstack gap-3">
+                    <div id="inputRows" class="mb-3">
+                      <div class="dynamic-input-row row g-2 mb-2">
+                        <div class="col-7">
+                          <input type="text" class="form-control input-highlight" name="problem[]" placeholder="Nom de l'article" required>
+                        </div>
+                        <div class="col-3">
+                          <input type="number" class="form-control input-highlight" name="frequency[]" placeholder="Quantité" min="1" required 
+                                 onkeydown="if(event.key === 'e' || event.key === 'E' || event.key === '+' || event.key === '-') event.preventDefault();" >
+                        </div>
+                        <div class="col-2">
+                          <button type="button" class="btn btn-danger w-100 floating-action" onclick="removeRow(this)" disabled>
+                            <i class="mdi mdi-minus"></i>
+                          </button>
+                        </div>
                       </div>
-                      <div class="col-3">
-                        <input type="number" class="form-control form-control-sm" name="frequency[]" placeholder="Fréquence" required min="1" />
-                      </div>
-                      <div class="col-2">
-                        <button type="button" class="btn btn-danger btn-sm w-100" onclick="removeRow(this)" disabled>
-                          <i class="bi bi-dash-lg"></i>
+                    </div>
+                    <button type="button" class="btn btn-outline-primary floating-action" onclick="addRow()">
+                      <i class="mdi mdi-plus-circle-outline me-2"></i>
+                      Ajouter une entrée
+                    </button>
+                    <div class="confirmation-badge p-3 rounded-2 mt-3" id="confirmationBox" style="display: none;">
+                      <div id="confirmSection">
+                        <button type="button" class="btn btn-success w-100 floating-action" id="confirmDataBtn" onclick="confirmData()">
+                          <i class="mdi mdi-check-circle me-2"></i>
+                          Confirmer les données saisies
                         </button>
                       </div>
-                    </div>
-                  </div>
-                  <div class="text-center">
-                    <button type="button" class="btn btn-success btn-sm rounded-pill" onclick="addRow()">
-                      <i class="bi bi-plus-circle me-1"></i>Ajouter une ligne
-                    </button>
-                  </div>
-                  <!-- Zone de confirmation pour la saisie manuelle -->
-                  <div class="confirmation-box mt-3" id="confirmationBox" style="display: none;">
-                    <div id="confirmSection">
-                      <button type="button" class="btn btn-success btn-sm w-100" id="confirmDataBtn" onclick="confirmData()">
-                        <i class="bi bi-check-circle me-1"></i>Confirmer les données saisies
-                      </button>
-                    </div>
-                    <div id="confirmedSection" style="display: none;">
-                      <div class="d-flex justify-content-between align-items-center">
-                        <div class="d-flex align-items-center text-success">
-                          <i class="bi bi-check2-circle me-2 fs-5"></i>
-                          <span>Données prêtes pour l'analyse</span>
-                        </div>
-                        <div>
-                          <button type="button" class="btn btn-warning btn-sm me-2" onclick="editData()">
-                            <i class="bi bi-pencil-square"></i>
-                          </button>
-                          <button type="button" class="btn btn-danger btn-sm" onclick="deleteData()">
-                            <i class="bi bi-trash"></i>
-                          </button>
+                      <div id="confirmedSection" style="display: none;">
+                        <div class="d-flex justify-content-between align-items-center">
+                          <div class="d-flex align-items-center text-success">
+                            <i class="mdi mdi-check-decagram me-2"></i>
+                            Données validées avec succès
+                          </div>
+                          <div>
+                            <button type="button" class="btn btn-sm btn-warning me-2 floating-action" onclick="editData()">
+                              <i class="mdi mdi-pencil"></i>
+                            </button>
+                            <button type="button" class="btn btn-sm btn-danger floating-action" onclick="deleteData()">
+                              <i class="mdi mdi-trash-can"></i>
+                            </button>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                  <!-- Fin confirmation -->
                 </div>
               </div>
+      
+              <!-- Bouton de soumission -->
+              <div class="d-grid mt-4">
+                <button type="submit" class="btn btn-primary btn-lg py-3 floating-action">
+                  <i class="mdi mdi-rocket-launch-outline me-2"></i>
+                  Exécuter l'analyse
+                </button>
+              </div>
             </div>
-          </div>
-          <!-- Bouton de soumission -->
-          <div class="card-footer bg-transparent border-top-0 pt-4">
-            <button type="submit" class="btn btn-primary w-100 py-3 fw-medium">
-              <i class="bi bi-lightning-charge me-2"></i>Lancer l'analyse
-            </button>
           </div>
         </div>
       </form>
     </div>
-    <!-- JavaScript personnalisé -->
+      
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
       let isDataConfirmed = false;
-      // Gestion du changement d'onglet (mise à jour du style des boutons)
+      
+      // Gestion du changement d'onglet pour la source des données
       document.addEventListener("DOMContentLoaded", () => {
-        // Au chargement, le mode fichier est actif, on marque l'onglet manuel comme inactif.
-        document.getElementById("manual-tab").classList.add("inactive-tab");
-        // Écouteurs sur les onglets pour inverser le style inactive
-        document.getElementById("file-tab").addEventListener("click", function () {
-          this.classList.remove("inactive-tab");
-          document.getElementById("manual-tab").classList.add("inactive-tab");
-        });
-        document.getElementById("manual-tab").addEventListener("click", function () {
-          this.classList.remove("inactive-tab");
-          document.getElementById("file-tab").classList.add("inactive-tab");
+        const importTabs = document.querySelectorAll("#importTabs button");
+        importTabs.forEach((tab) => {
+          tab.addEventListener("shown.bs.tab", function (event) {
+            if (event.target.id === "manual-tab") {
+              // Lorsque l'onglet Manuel est activé, vider le champ fichier et activer la saisie manuelle
+              const fileInput = document.getElementById("fileInput");
+              fileInput.value = "";
+              updateFileName(fileInput);
+              toggleManualInput(false);
+            }
+            // Pour l'onglet Fichier, on ne désactive pas systématiquement la saisie manuelle
+          });
+      
+          // Attacher l'écouteur sur le champ fichier
+          document.getElementById("fileInput").addEventListener("change", function(e) {
+            const file = e.target.files[0];
+            if (file) {
+              const fileExtension = file.name.split('.').pop().toLowerCase();
+              if (!['csv', 'xlsx'].includes(fileExtension)) {
+                alert('Format non supporté. Veuillez utiliser un fichier CSV ou Excel.');
+                e.target.value = '';
+                return;
+              }
+            }
+            updateFileName(e.target);
+          });
+      
+          // Gestion de la saisie manuelle (ajout des écouteurs sur les inputs existants)
+          document.querySelectorAll("#inputRows input").forEach((input) => {
+            input.addEventListener("input", handleManualInput);
+          });
+      
+          // Gestion du mode ABC personnalisé
+          toggleAnalysisType();
+          document.querySelectorAll('input[name="analysisType"]').forEach((radio) => {
+            radio.addEventListener("change", toggleAnalysisType);
+          });
         });
       });
+      
+      // Mise à jour du nom du fichier sélectionné
       function updateFileName(input) {
-        const fileNameDisplay = document.getElementById("fileNameDisplay");
+        const fileStatus = document.getElementById("fileStatus");
         const hasFile = input.files.length > 0;
-        fileNameDisplay.innerHTML = hasFile
-          ? '<i class="bi bi-file-earmark-text me-2"></i><span>' + input.files[0].name + '</span>'
-          : '<i class="bi bi-file-earmark-text me-2"></i><span>Aucun fichier sélectionné</span>';
-        document.getElementById("removeFileButton").style.display = hasFile ? "block" : "none";
+        fileStatus.innerHTML = hasFile
+          ? '<i class="mdi mdi-file-check me-2"></i>' + input.files[0].name
+          : 'Aucun fichier sélectionné';
+        // Si un fichier est sélectionné, désactiver la saisie manuelle
         toggleManualInput(hasFile);
         if (hasFile) {
+          // Masquer la confirmation manuelle et marquer que les données sont validées
           document.getElementById("confirmationBox").style.display = "none";
           isDataConfirmed = true;
-          // Si un fichier est sélectionné, on marque l'onglet manuel comme inactif
-          document.getElementById("manual-tab").classList.add("inactive-tab");
         }
       }
-      function removeFile() {
-        const fileInput = document.getElementById("fileInput");
-        fileInput.value = "";
-        updateFileName(fileInput);
-        document.getElementById("removeFileButton").style.display = "none";
-      }
+      
+      // Fonction pour activer/désactiver la saisie manuelle
       function toggleManualInput(disabled) {
         document.querySelectorAll("#inputRows input, #inputRows button").forEach((el) => {
           el.disabled = disabled;
           if (disabled) el.value = "";
         });
-        document.querySelector('button[onclick="addRow()"]').disabled = disabled;
+        const addButton = document.querySelector('button[onclick="addRow()"]');
+        if (addButton) addButton.disabled = disabled;
       }
+      
+      // Réinitialiser les champs de saisie manuelle
       function clearManualInputs() {
-        document.getElementById("inputRows").innerHTML = '<div class="row g-2 mb-2">' +
-          '<div class="col-7">' +
-            '<input type="text" class="form-control form-control-sm" name="problem[]" placeholder="Description du problème" required>' +
-          '</div>' +
-          '<div class="col-3">' +
-            '<input type="number" class="form-control form-control-sm" name="frequency[]" placeholder="Fréquence" required min="1">' +
-          '</div>' +
-          '<div class="col-2">' +
-            '<button type="button" class="btn btn-danger btn-sm w-100" onclick="removeRow(this)" disabled>' +
-              '<i class="bi bi-dash-lg"></i>' +
-            '</button>' +
-          '</div>' +
-        '</div>';
+        document.getElementById("inputRows").innerHTML =
+          '<div class="row g-2 mb-2">' +
+            '<div class="col-7">' +
+              '<input type="text" class="form-control input-highlight" name="problem[]" placeholder="Nom de l\'article" required>' +
+            '</div>' +
+            '<div class="col-3">' +
+              '<input type="number" class="form-control input-highlight" name="frequency[]" placeholder="Quantité" required min="1" onkeydown="if(event.key === \'e\' || event.key === \'E\' || event.key === \'+\' || event.key === \'-\') event.preventDefault();">' +
+            '</div>' +
+            '<div class="col-2">' +
+              '<button type="button" class="btn btn-danger w-100 floating-action" onclick="removeRow(this)" disabled>' +
+                '<i class="mdi mdi-minus"></i>' +
+              '</button>' +
+            '</div>' +
+          '</div>';
         isDataConfirmed = false;
         document.getElementById("confirmationBox").style.display = "none";
       }
+      
       function updateRemoveButtons() {
         const rows = document.querySelectorAll("#inputRows .row");
         if (rows.length === 1) {
           rows[0].querySelector("button").disabled = true;
         } else {
-          rows.forEach((row) => (row.querySelector("button").disabled = false));
+          rows.forEach((row) => {
+            row.querySelector("button").disabled = false;
+          });
         }
       }
+      
       function addRow() {
         if (isDataConfirmed) return;
         const firstRow = document.querySelector("#inputRows .row");
         const newRow = firstRow.cloneNode(true);
         newRow.querySelectorAll("input").forEach((input) => (input.value = ""));
+        const qtyInput = newRow.querySelector('input[name="frequency[]"]');
+        qtyInput.setAttribute("onkeydown", "if(event.key === 'e' || event.key === 'E' || event.key === '+' || event.key === '-') event.preventDefault();");
         document.getElementById("inputRows").appendChild(newRow);
         updateRemoveButtons();
         checkManualInput();
@@ -486,6 +533,7 @@
           input.addEventListener("input", handleManualInput);
         });
       }
+      
       function removeRow(button) {
         if (isDataConfirmed) return;
         const rows = document.querySelectorAll("#inputRows .row");
@@ -495,14 +543,36 @@
           checkManualInput();
         }
       }
+      
       function confirmData() {
-        isDataConfirmed = true;
-        document.getElementById("confirmSection").style.display = "none";
-        document.getElementById("confirmedSection").style.display = "block";
-        document.querySelectorAll("#inputRows input, #inputRows button").forEach(
-          (el) => (el.disabled = true)
-        );
+        if (validateManualData()) {
+          isDataConfirmed = true;
+          document.getElementById("confirmSection").style.display = "none";
+          document.getElementById("confirmedSection").style.display = "block";
+          document.querySelectorAll("#inputRows input, #inputRows button").forEach(
+            (el) => (el.disabled = true)
+          );
+        }
       }
+      
+      function validateManualData() {
+        const inputs = document.querySelectorAll("#inputRows input");
+        let isValid = true;
+        inputs.forEach((input) => {
+          if (!input.value.trim()) {
+            isValid = false;
+            input.classList.add("is-invalid");
+          } else {
+            input.classList.remove("is-invalid");
+          }
+        });
+        if (!isValid) {
+          alert("Veuillez remplir tous les champs requis");
+          return false;
+        }
+        return true;
+      }
+      
       function editData() {
         isDataConfirmed = false;
         document.querySelectorAll("#inputRows input, #inputRows button").forEach(
@@ -511,24 +581,29 @@
         document.getElementById("confirmSection").style.display = "block";
         document.getElementById("confirmedSection").style.display = "none";
       }
+      
       function deleteData() {
         clearManualInputs();
         document.getElementById("confirmSection").style.display = "block";
         document.getElementById("confirmedSection").style.display = "none";
       }
+      
       function checkManualInput() {
         const hasData = Array.from(document.querySelectorAll('[name="problem[]"]')).some(
           (input) => input.value.trim() !== ""
         );
         document.getElementById("confirmationBox").style.display = hasData ? "block" : "none";
       }
+      
       function handleManualInput() {
         checkManualInput();
       }
+      
       document.querySelectorAll("#inputRows input").forEach((input) => {
         input.addEventListener("input", handleManualInput);
       });
-      // Gestion du type d'analyse
+      
+      // Gestion du mode ABC personnalisé
       function toggleAnalysisType() {
         const abcSection = document.getElementById("abcCustomization");
         const isABC = document.getElementById("abcRadio").checked;
@@ -548,6 +623,7 @@
           submitButton.disabled = false;
         }
       }
+      
       function validateABCPercentages() {
         const inputs = document.querySelectorAll("#abcCustomization input");
         let total = 0;
@@ -564,6 +640,7 @@
         document.getElementById("totalSum").textContent = total.toFixed(1);
         return isValid;
       }
+      
       document.querySelectorAll("#abcCustomization input").forEach((input) => {
         input.addEventListener("input", () => {
           const submitButton = document.querySelector('button[type="submit"]');
@@ -574,12 +651,15 @@
           }
         });
       });
+      
       document.addEventListener("DOMContentLoaded", () => {
         toggleAnalysisType();
         document.querySelectorAll('input[name="analysisType"]').forEach((radio) => {
           radio.addEventListener("change", toggleAnalysisType);
         });
       });
+      
+      // Gestion de la soumission du formulaire
       document.querySelector("form").addEventListener("submit", function (e) {
         if (document.getElementById("abcRadio").checked) {
           const abcInputs = document.querySelectorAll("#abcCustomization input");
@@ -604,6 +684,5 @@
         }
       });
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>
